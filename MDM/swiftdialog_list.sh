@@ -24,8 +24,17 @@ fi
 
 items=(
     "firefoxpkg|Firefox"
-    "error|Expected Error"
+   # "error|Expected Error"
     "googlechromepkg|Google Chrome"
+    "microsoftedge|Microsoft Edge"
+    "slack|Slack"
+    "spotify|Spotify"
+    "vlc|VLC"
+    "zoom|Zoom"
+    "swiftdialog|Swift Dialog"
+    "microsoftvisualstudiocode|Visual Studio Code"
+    "nordvpn|NordVPN"
+    "gimp|GIMP"
  )
 
 # MARK: Constants
@@ -41,8 +50,13 @@ fi
 
 dialog="/usr/local/bin/dialog"
 
-if [[ DEBUG -eq 0 ]]; then
+if [[ $DEBUG -eq 0 ]]; then
     dialog_command_file="/var/tmp/dialog.log"
+    # Ensure directory exists with proper permissions
+    mkdir -p /var/tmp
+    chmod 777 /var/tmp
+    touch "$dialog_command_file"
+    chmod 666 "$dialog_command_file"
 else
     dialog_command_file="$HOME/dialog.log"
 fi
@@ -152,17 +166,17 @@ for item in $items; do
 done
 
 # display first screen
-$dialog --title "More Software" \
-        --icon "SF=gear" \
-        --message "We are downloading and installing some extra Apps..." \
-        --progress $itemCount \
-        "${listitems[@]}" \
-        --button1disabled \
-        --big \
-        --ontop \
-        --liststyle compact \
-        --width 700 \
-        --commandfile $dialog_command_file & dialogPID=$!
+$dialog --title "macOS Software" \
+    --icon "spacex.png" \
+    --message "Downloading and installing Apps..." \
+    --progress $itemCount \
+    "${listitems[@]}" \
+    --big \
+    --ontop \
+    --liststyle compact \
+    --width 700 \
+    --blurscreen 0.5 \
+    --commandfile $dialog_command_file & dialogPID=$!
 sleep 0.1
 
 itemCounter=0

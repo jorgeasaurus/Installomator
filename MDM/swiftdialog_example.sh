@@ -23,7 +23,6 @@ fi
 # the label to install:
 label="googlechromepkg"
 
-
 # MARK: Constants
 
 scriptDir=$(dirname ${0:A})
@@ -37,12 +36,16 @@ fi
 
 dialog="/usr/local/bin/dialog"
 
-if [[ DEBUG -eq 0 ]]; then
+if [[ $DEBUG -eq 0 ]]; then
     dialog_command_file="/var/tmp/dialog.log"
+    # Ensure directory exists with proper permissions
+    mkdir -p /var/tmp
+    chmod 777 /var/tmp
+    touch "$dialog_command_file"
+    chmod 666 "$dialog_command_file"
 else
     dialog_command_file="$HOME/dialog.log"
 fi
-
 
 # MARK: Functions
 
@@ -88,6 +91,7 @@ cleanupAndExit() {
     fi
 }
 
+
 # MARK: sanity checks
 
 # check minimal macOS requirement
@@ -115,6 +119,7 @@ if [[ ! -x $dialog ]]; then
 fi
 
 
+
 # MARK: Setup
 
 # No sleeping
@@ -124,15 +129,17 @@ caffeinate -dimsu & caffeinatePID=$!
 trap cleanupAndExit EXIT
 
 # display first screen
-$dialog --title "Installing $label" \
-        --message "" \
-        --hideicon \
-        --mini \
-        --progress 100 \
-        --position bottomright \
-        --ontop \
-        --movable \
-        --commandfile $dialog_command_file & dialogPID=$!
+$dialog --title "macOS Software" \
+    --icon "spacex.png" \
+    --message "Downloading and installing Apps..." \
+    --progress $itemCount \
+    "${listitems[@]}" \
+    --big \
+    --ontop \
+    --liststyle compact \
+    --width 700 \
+    --blurscreen 0.5 \
+    --commandfile $dialog_command_file & dialogPID=$!
 
 sleep 0.1
 

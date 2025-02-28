@@ -83,7 +83,7 @@ BLOCKING_PROCESS_ACTION=tell_user
 
 
 # logo-icon used in dialog boxes if app is blocking
-LOGO=appstore
+LOGO=jamf
 # options:
 #   - appstore      Icon is Apple App Store (default)
 #   - jamf          JAMF Pro
